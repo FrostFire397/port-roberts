@@ -1,13 +1,13 @@
-package com.example;
+package com.portroberts;
 
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
-public class ExamplePluginTest
+public class PortRobertsPluginTest
 {
 	public static void main(String[] args) throws Exception
 	{
-		ExternalPluginManager.loadBuiltin(ExamplePlugin.class);
+		ExternalPluginManager.loadBuiltin(PortRobertsPlugin.class);
 		RuneLite.main(args);
 	}
 }
