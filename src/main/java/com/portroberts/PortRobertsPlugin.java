@@ -59,6 +59,7 @@ public class PortRobertsPlugin extends Plugin
     @Getter(AccessLevel.PACKAGE)
     private int currentTick = 0;
 
+    @Getter(AccessLevel.PACKAGE)
     private boolean calibrating = true;
 
 
@@ -77,6 +78,8 @@ public class PortRobertsPlugin extends Plugin
         for (NPC npc : Guards) {
             npc.setOverheadText("");
         }
+        this.CballStall = null;
+        this.OreStall = null;
         this.Guards.clear();
         overlayManager.remove(portRobertsOverlay);
 	}
@@ -85,7 +88,6 @@ public class PortRobertsPlugin extends Plugin
     public void onNpcSpawned(NpcSpawned npcSpawned) {
          if (MarketGuards.contains(npcSpawned.getNpc().getId())) {
             Guards.add(npcSpawned.getNpc());
-            log.debug("found a guard");
          }
     }
 
@@ -109,6 +111,17 @@ public class PortRobertsPlugin extends Plugin
     }
 
     @Subscribe
+    public void onGameObjectDespawned(GameObjectDespawned gameObjectDespawned) {
+        GameObject object = gameObjectDespawned.getGameObject();
+        if (object.getId() == net.runelite.api.gameval.ObjectID.PORT_ROBERTS_MARKET_STALL_CBALL) {
+            this.CballStall = null;
+        }
+        if (object.getId() == net.runelite.api.gameval.ObjectID.PORT_ROBERTS_MARKET_STALL_ORE) {
+            this.OreStall = null;
+        }
+    }
+
+    @Subscribe
     public void onClientTick(ClientTick tick) {
         for (NPC npc : Guards) {
             if (config.showNumbers()) {
@@ -122,7 +135,7 @@ public class PortRobertsPlugin extends Plugin
 
     private String getGuardString() {
         String colorCode;
-        Set<Integer> RedTicks = Set.of(8, 9, 10, 28, 29, 30);
+        Set<Integer> RedTicks = Set.of(8, 9, 10, 18, 19, 20, 28, 29, 30);
 
         // Determine msg color
         if (RedTicks.contains(this.currentTick) ) {
@@ -149,7 +162,7 @@ public class PortRobertsPlugin extends Plugin
 
         // If we haven't nailed the cycle down yet just throw a calibration message
         if (calibrating) {
-            output = "calibrating";
+            output = "";
         }
         return output;
     }

@@ -32,8 +32,17 @@ public class PortRobertsOverlay extends Overlay {
         if (tick <= 10 || tick > 30) {
             cballColor = Color.RED;
             oreColor = Color.GREEN;
+        } else if (tick <= 20) {
+            cballColor = Color.GREEN;
+            oreColor = Color.RED;
         } else {
             cballColor = Color.GREEN;
+            oreColor = Color.GREEN;
+        }
+
+        // If we're calibrating just overwrite to red
+        if (plugin.isCalibrating()) {
+            cballColor = Color.RED;
             oreColor = Color.RED;
         }
 
